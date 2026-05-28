@@ -15,8 +15,6 @@ struct Player{
 
     int w;
     int h;//大きさ
-
-
 };
 
 struct MobileInput
@@ -266,6 +264,7 @@ int android_main()
     player.y = 1000;
     player.w = 100;
     player.h = 100;
+
     while (ProcessMessage() == 0)
     {
         ClearDrawScreen();
@@ -280,7 +279,7 @@ int android_main()
         ScreenFlip();
     }
 
-    for(int startX = 0; x < )
+    //for(int startX = 0; x < )
 
     DxLib_End();
     return 0;

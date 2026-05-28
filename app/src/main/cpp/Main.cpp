@@ -14,6 +14,17 @@ struct UILayout{
     Rect bottomRight;
     Rect center;
 };
+struct  Player{
+    float x;
+    float  y;
+
+    int w;
+    int h;
+
+    float vx;
+    float vy;
+
+};
 UILayout CreateLayout(int screenW, int screenH){
     const int panelW = 180;
     const int panelH = 90;
