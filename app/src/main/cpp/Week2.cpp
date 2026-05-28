@@ -26,9 +26,8 @@ struct MobileInput
 };
 
 
-//==============================
+
 // 距離
-//==============================
 float GetDistance(float x1, float y1, float x2, float y2)
 {
     float dx = x2 - x1;
@@ -38,9 +37,9 @@ float GetDistance(float x1, float y1, float x2, float y2)
 }
 
 
-//==============================
+
 // 入力初期化
-//==============================
+
 void InitMobileInput(MobileInput* input)
 {
     input->isTouching = false;
@@ -53,9 +52,9 @@ void InitMobileInput(MobileInput* input)
 }
 
 
-//==============================
+
 // タッチ更新
-//==============================
+
 void UpdateMobileInput(MobileInput* input)
 {
     int touchNum = GetTouchInputNum();
@@ -86,9 +85,9 @@ void UpdateMobileInput(MobileInput* input)
 }
 
 
-//==============================
+
 // プレイヤー描画
-//==============================
+
 void DrawPlayer(const Player& p)
 {
     DrawBox(
@@ -118,9 +117,9 @@ void DrawPlayer(const Player& p)
 }
 
 
-//==============================
+
 // プレイヤーに触れたか
-//==============================
+
 bool IsTouchPlayer(const Player& p, int tx, int ty)
 {
     return (
@@ -132,9 +131,7 @@ bool IsTouchPlayer(const Player& p, int tx, int ty)
 }
 
 
-//==============================
-// メイン
-//==============================
+
 int android_main()
 {
     SetGraphMode(720, 1280, 32);
@@ -146,15 +143,15 @@ int android_main()
 
     SetDrawScreen(DX_SCREEN_BACK);
 
-    //---------------------------------
+
     // 入力
-    //---------------------------------
+
     MobileInput input;
     InitMobileInput(&input);
 
-    //---------------------------------
+
     // プレイヤー
-    //---------------------------------
+
     Player player;
 
     player.x = 300;
@@ -166,31 +163,31 @@ int android_main()
     player.vx = 0;
     player.vy = 0;
 
-    //---------------------------------
+
     // ドラッグ状態
-    //---------------------------------
+
     bool dragging = false;
 
-    //---------------------------------
+
     // 前フレームのタッチ状態
-    //---------------------------------
+
     bool prevTouch = false;
 
-    //---------------------------------
+
     // メインループ
-    //---------------------------------
+
     while (ProcessMessage() == 0)
     {
         ClearDrawScreen();
 
-        //---------------------------------
+
         // 入力更新
-        //---------------------------------
+
         UpdateMobileInput(&input);
 
-        //---------------------------------
+
         // タッチ開始
-        //---------------------------------
+
         if (input.isTouching && !prevTouch)
         {
             if (IsTouchPlayer(player, input.currentX, input.currentY))
@@ -203,18 +200,18 @@ int android_main()
             }
         }
 
-        //---------------------------------
+
         // ドラッグ中
-        //---------------------------------
+
         if (dragging && input.isTouching)
         {
             player.x = input.currentX - player.w / 2;
             player.y = input.currentY - player.h / 2;
         }
 
-        //---------------------------------
+
         // 指を離した瞬間
-        //---------------------------------
+
         if (!input.isTouching && prevTouch && dragging)
         {
             dragging = false;
@@ -222,9 +219,9 @@ int android_main()
             float dx = input.currentX - input.startX;
             float dy = input.currentY - input.startY;
 
-            //---------------------------------
+
             // 最大距離制限
-            //---------------------------------
+
             float length = GetDistance(
                     0,
                     0,
@@ -240,9 +237,9 @@ int android_main()
                 dy *= maxLength / length;
             }
 
-            //---------------------------------
+
             // 発射
-            //---------------------------------
+
             float power = 0.15f;
 
             // 逆方向へ飛ばす
@@ -250,21 +247,20 @@ int android_main()
             player.vy = -dy * power;
         }
 
-        //---------------------------------
+
         // 移動
-        //---------------------------------
+
         player.x += player.vx;
         player.y += player.vy;
 
-        //---------------------------------
-        // 摩擦
-        //---------------------------------
-        player.vx *= 0.98f;
-        player.vy *= 0.98f;
 
-        //---------------------------------
+        // 摩擦
+        //player.vx *= 0.98f;
+        //player.vy *= 0.98f;
+
+
         // 壁反射
-        //---------------------------------
+
 
         // 左
         if (player.x < 0)
@@ -294,14 +290,14 @@ int android_main()
             player.vy *= -1;
         }
 
-        //---------------------------------
+
         // プレイヤー描画
-        //---------------------------------
+
         DrawPlayer(player);
 
-        //---------------------------------
+
         // 引っ張り線
-        //---------------------------------
+
         if (dragging)
         {
             DrawLine(
@@ -313,9 +309,7 @@ int android_main()
             );
         }
 
-        //---------------------------------
         // デバッグ
-        //---------------------------------
         DrawFormatString(
                 20,
                 20,
@@ -324,14 +318,11 @@ int android_main()
                 input.isTouching
         );
 
-        //---------------------------------
         // タッチ保存
-        //---------------------------------
         prevTouch = input.isTouching;
 
-        //---------------------------------
+
         // 画面更新
-        //---------------------------------
         ScreenFlip();
     }
 
